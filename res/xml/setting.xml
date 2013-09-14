@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <PreferenceCategory
+        android:key="ip_port_set"
+        android:title="公司路由设置" >
+        <EditTextPreference
+            android:key="ip_set"
+            android:summary="输入服务器的IP地址"
+            android:title="IP地址" />
+        <EditTextPreference
+            android:key="port_set"
+            android:summary="服务器所使用的端口"
+            android:title="端口号" />
+    </PreferenceCategory>
+    <PreferenceCategory
+        android:key="wifi_set"
+        android:title="WIFI设定" >
+        <ListPreference
+            android:dialogTitle="选择WIFI加密方式"
+            android:entries="@array/encrypt_type"
+            android:entryValues="@array/encrypt_value"
+            android:key="typelist"
+            android:summary="根据具体的WIFI设定"
+            android:title="WIFI加密方式" />
+
+        <EditTextPreference
+            android:key="ssid_set"
+            android:summary="无"
+            android:title="网络名称" />
+        <EditTextPreference
+            android:key="password_set"
+            android:summary="无"
+            android:title="密码" />
+    </PreferenceCategory>
+
+    <CheckBoxPreference
+        android:defaultValue="true"
+        android:key="is_boot_start"
+        android:summaryOff="未设置开机自动启动"
+        android:summaryOn="已设置开机自动开启服务"
+        android:title="开机自动启动" />
+
+</PreferenceScreen>

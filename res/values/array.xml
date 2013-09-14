@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="encrypt_type">
+        <item >WPA</item>
+        <item >WEP</item>
+        <item >无密码</item>
+    </string-array>
+    <string-array name="encrypt_value">
+        <item >1</item>
+        <item >2</item>
+        <item >3</item>
+    </string-array>
+    
+</resources>
