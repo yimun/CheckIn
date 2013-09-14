@@ -20,31 +20,36 @@ public class PreferGeter {
 
 	// À´×ÔSettingActivity µÄ Preference
 	public String getIP() {
-		return sp.getString("ip_set", null);
+		return sp.getString("ip_set", "NULL");
 	}
 
-	public String getPort() {
-
-		return sp.getString("port_set", null);
+	public int getPort() {
+		
+		String temp = sp.getString("port_set", "0");
+		return Integer.parseInt(temp);
 
 	}
 
 	public int getType() {
-		return sp.getInt("ssid_set", 1);
+		return sp.getInt("type_set", 1);
 	}
 
 	public String getSSID() {
-		return sp.getString("ssid_set", null);
+		return sp.getString("ssid_set", "NULL");
 	}
 
 	public String getWifiPassword() {
-		return sp.getString("password_set", null);
+		return sp.getString("password_set", "NULL");
 	}
 	
 	public String getUsername(){
+		return sp_user.getString("username", "NULL");
+	}
+	
+	public boolean getBootStart(){
 		
-		return sp_user.getString("username", " ");
-		
+		String get = sp.getString("is_boot_start", "true");
+		return Boolean.parseBoolean(get);
 	}
 
 }

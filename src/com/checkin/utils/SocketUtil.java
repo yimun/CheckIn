@@ -11,26 +11,27 @@ import android.preference.PreferenceManager;
 
 public class SocketUtil {
 
-	static Socket socket;
-	static PreferGeter geter;
-	static int port;
-	static String IP;
-	static String username; 
-	static DataInputStream din;
-	static DataOutputStream dout;
+	Socket socket;
+	PreferGeter geter;
+	int port;
+	String IP;
+	String username;
+	DataInputStream din;
+	DataOutputStream dout;
 
-	public static boolean isConnected = false;
+	public boolean isConnected = false;
 
 	public SocketUtil(Context con) {
 
 		geter = new PreferGeter(con);
-		port = Integer.parseInt(geter.getPort());
+		port = geter.getPort();
 		IP = geter.getIP();
 		username = geter.getUsername();
 	}
 
 	// 连接服务器
-	public static void connectServer() throws Exception {
+	public void connectServer() throws Exception {
+		
 		if (socket != null) {
 			return;
 		}
@@ -50,7 +51,7 @@ public class SocketUtil {
 	}
 
 	// 注册
-	public static boolean register(String id, String pwd) {
+	public boolean register(String id, String pwd) {
 		boolean isExist = false;
 		try {
 			dout.writeUTF("register;" + id + ";" + pwd);
@@ -64,7 +65,8 @@ public class SocketUtil {
 	}
 
 	// 登录验证
-	public static boolean loginValidate(String id, String pwd) {
+	public boolean loginValidate(String id, String pwd) {
+		
 		boolean isValid = false;
 
 		try {
@@ -96,7 +98,23 @@ public class SocketUtil {
 			e.printStackTrace();
 		}
 		return isSuccess;
-
+	}
+	
+	public void close(){
+		try {
+			if(socket!=null){
+				socket.close();
+			}
+			if(din!=null){
+				din.close();
+			}
+			if(dout!=null){
+				dout.close();
+			}
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 }

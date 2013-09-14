@@ -12,16 +12,35 @@
         android:id="@+id/textView2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
         android:text="签到状态：" />
 
     <TextView
         android:id="@+id/showstate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/textView2"
         android:layout_below="@+id/textView2"
+        android:layout_centerHorizontal="true"
         android:layout_marginTop="16dp"
         android:text="Medium Text"
         android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    <Button
+        android:id="@+id/stop"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/start"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="81dp"
+        android:text="关闭服务" />
+
+    <Button
+        android:id="@+id/start"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/showstate"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="148dp"
+        android:text="开始服务" />
 
 </RelativeLayout>

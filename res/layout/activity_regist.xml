@@ -1,14 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="#999999" >
-    
-    <ImageView 
-        android:layout_alignParentTop="true"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        />
+    android:layout_height="match_parent" >
 
     <TableLayout
         android:id="@+id/myregistinfo"
@@ -26,14 +19,16 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="5px"
-                android:text="用户名" />
+                android:text="用户名：" />
 
             <EditText
                 android:id="@+id/regist_account"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginRight="5px"
+                android:layout_weight="1"
                 android:inputType="number" />
+
         </TableRow>
 
         <TableRow
@@ -43,14 +38,20 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="5px"
-                android:text="密  码" />
+                android:text="密   码：" />
 
             <EditText
                 android:id="@+id/regist_psw"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginRight="5px"
+                android:layout_weight="1"
                 android:inputType="textPassword" />
+
+        </TableRow>
+
+        <TableRow
+             android:layout_marginBottom="15px">
         </TableRow>
 
         <TableRow
@@ -60,31 +61,15 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="5px"
-                android:text="组  别" />
-
-            <CheckBox
-                android:id="@+id/regist_group"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="5px"
-                android:text="司机" />
-        </TableRow>
-
-        <TableRow
-             android:layout_marginBottom="15px">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="5px"
-                android:text="描  述" />
+                android:text="再次输入密码：" />
 
             <EditText
-                android:id="@+id/regist_describe"
+                android:id="@+id/regist_psw2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginRight="5px"
-                android:hint="司机请输入车牌号" />
+                android:layout_weight="1" />
+
         </TableRow>
     </TableLayout>
 

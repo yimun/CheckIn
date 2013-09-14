@@ -28,23 +28,11 @@
                 android:layout_alignRight="@+id/login_edit_account"
                 android:layout_below="@+id/login_edit_account"
                 android:layout_marginRight="1.0dip"
-                android:layout_toRightOf="@+id/TextView02"
+                android:layout_toRightOf="@+id/TextView01"
                 android:inputType="textPassword"
                 android:maxLength="16"
                 android:paddingLeft="45.0sp"
                 android:textColor="#000000" />
-
-            <Button
-                android:id="@+id/login_cb_savepwd"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/TextView02"
-                android:layout_centerHorizontal="true"
-                android:layout_marginTop="46dp"
-                android:paddingLeft="25.0px"
-                android:text="登录"
-                android:textColor="#ff222222"
-                android:textSize="16.0sp" />
 
             <TextView
                 android:id="@+id/TextView01"
@@ -70,8 +58,6 @@
                 android:maxLength="10"
                 android:paddingLeft="45sp"
                 android:textColor="#000000" />
-            
-            
 
             <TextView
                 android:id="@+id/TextView02"
@@ -85,8 +71,38 @@
                 android:textColor="#ff3f3f3f"
                 android:textSize="16.0dip" />
 
-        </RelativeLayout>
+            <Button
+                android:id="@+id/login_cb_savepwd"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignLeft="@+id/login_edit_pwd"
+                android:layout_below="@+id/login_edit_pwd"
+                android:layout_marginLeft="80dp"
+                android:layout_marginTop="34dp"
+                android:paddingLeft="25.0px"
+                android:text="登录" />
 
+            <Button
+                android:id="@+id/regist"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBaseline="@+id/login_cb_savepwd"
+                android:layout_alignBottom="@+id/login_cb_savepwd"
+                android:layout_alignParentLeft="true"
+                android:layout_marginLeft="45dp"
+                android:text="注册" />
+
+        </RelativeLayout>
     </LinearLayout>
+
+    <Button
+        android:id="@+id/baseset"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="false"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="20dp"
+        android:text="设置公司wifi基本信息" />
 
 </RelativeLayout>
