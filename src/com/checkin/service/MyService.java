@@ -10,7 +10,7 @@ import android.os.IBinder;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.checkin.LoginActivity;
+
 import com.checkin.MainActivity;
 import com.checkin.R;
 import com.checkin.utils.PreferGeter;
@@ -154,7 +154,7 @@ public class MyService extends Service {
 
 	}
 
-	public void showNotif(Context context) {
+	/*public void showNotif(Context context) {
 		// TODO Auto-generated method stub
 
 		String title;
@@ -188,5 +188,5 @@ public class MyService extends Service {
 		// 用mNotificationManager的notify方法通知用户生成标题栏消息通知
 		mNotificationManager.notify(1, notification);
 
-	}
+	}*/
 }

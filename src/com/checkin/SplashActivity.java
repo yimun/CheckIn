@@ -28,8 +28,8 @@ public class SplashActivity extends Activity{
 		geter = new PreferGeter(this);
 		
 		// 判断是否已登陆，否则转到设置登录界面
-		if (geter.getUsername().equalsIgnoreCase("NULL")) {		
-			intent.setClass(getApplicationContext(), LoginActivity.class);
+		if (geter.getUnm().equalsIgnoreCase("NULL")) {		
+			intent.setClass(getApplicationContext(), RegistActivity.class);
 		}
 		else{
 			intent.setClass(getApplicationContext(), MainActivity.class);

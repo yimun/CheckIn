@@ -42,14 +42,24 @@ public class PreferGeter {
 		return sp.getString("password_set", "NULL");
 	}
 	
-	public String getUsername(){
-		return sp_user.getString("username", "NULL");
-	}
-	
 	public boolean getBootStart(){
 		
 		String get = sp.getString("is_boot_start", "true");
 		return Boolean.parseBoolean(get);
 	}
+	
+	public String getUnm(){
+		return sp_user.getString("username", "NULL");
+	}
+	
+	public String getPwd(){
+		return sp_user.getString("password", "NULL");
+	}
+	
+	public String getWcd(){
+		return sp_user.getString("workcode", "NULL");
+	}
+	
+	
 
 }

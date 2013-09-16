@@ -86,7 +86,7 @@ public class MainActivity extends Activity {
 
 		case R.id.item2:
 
-			startActivity(new Intent(this, LoginActivity.class));
+			startActivity(new Intent(this, RegistActivity.class));
 			break;
 		default:
 			break;

@@ -1,13 +1,12 @@
 package com.checkin.utils;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
 import java.net.Socket;
 
 import android.content.Context;
-import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
 
 public class SocketUtil {
 
@@ -15,9 +14,9 @@ public class SocketUtil {
 	PreferGeter geter;
 	int port;
 	String IP;
-	String username;
-	DataInputStream din;
-	DataOutputStream dout;
+	String username, password, workcode;
+	BufferedReader in;
+	PrintWriter out;
 
 	public boolean isConnected = false;
 
@@ -26,20 +25,23 @@ public class SocketUtil {
 		geter = new PreferGeter(con);
 		port = geter.getPort();
 		IP = geter.getIP();
-		username = geter.getUsername();
+		username = geter.getUnm();
+		password = geter.getPwd();
+		workcode = geter.getWcd();
 	}
 
 	// 连接服务器
 	public void connectServer() throws Exception {
-		
+
 		if (socket != null) {
 			return;
 		}
 		try {
 			// socket = new Socket("192.168.0.1",9999);
 			socket = new Socket(IP, port);
-			din = new DataInputStream(socket.getInputStream());
-			dout = new DataOutputStream(socket.getOutputStream());
+			in = new BufferedReader(new InputStreamReader(
+					socket.getInputStream()));
+			out = new PrintWriter(socket.getOutputStream());
 			isConnected = true;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -51,47 +53,33 @@ public class SocketUtil {
 	}
 
 	// 注册
-	public boolean register(String id, String pwd) {
-		boolean isExist = false;
+	public boolean register(String username, String pwd, String workcode) {
+		boolean isSuccess = false;
 		try {
-			dout.writeUTF("register;" + id + ";" + pwd);
-			String booleanStr = din.readUTF();
-			System.out.println(booleanStr);
-			isExist = Boolean.parseBoolean(booleanStr);
+			out.println("create;" + username + ";" + pwd + ";" + workcode);
+			String getstr = in.readLine();
+			System.out.println(getstr);
+			if (getstr.equals("USERCREATED")) {
+				isSuccess = true;
+			}
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		return isExist;
+		return isSuccess;
 	}
 
-	// 登录验证
-	public boolean loginValidate(String id, String pwd) {
-		
-		boolean isValid = false;
-
-		try {
-			dout.writeUTF("login;" + id + ";" + pwd);
-			System.out.println("write" + "login;" + id + ";" + pwd);
-			String temp = din.readUTF();
-			String booleanStr = temp.substring(0, temp.length() - 1);
-			System.out.println("client receive " + booleanStr);
-			isValid = Boolean.parseBoolean(booleanStr);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		return isValid;
-	}
-
-	// 向服务器发送签到的信息
+	// 登陆向服务器发送签到的信息
 	public boolean sendCheck() {
 
 		boolean isSuccess = false;
 
 		try {
-			dout.writeUTF("check;" + username);
-			String booleanStr = din.readUTF();
-			System.out.println(booleanStr);
-			isSuccess = Boolean.parseBoolean(booleanStr);
+			out.println("check;" + username + ";" + password + ";" + workcode);
+			String getstr = in.readLine();
+			System.out.println(getstr);
+			if(getstr.equals("LOGINSUCCESS")){
+				isSuccess = true;
+			}
 
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -99,17 +87,17 @@ public class SocketUtil {
 		}
 		return isSuccess;
 	}
-	
-	public void close(){
+
+	public void close() {
 		try {
-			if(socket!=null){
+			if (socket != null) {
 				socket.close();
 			}
-			if(din!=null){
-				din.close();
+			if (in != null) {
+				in.close();
 			}
-			if(dout!=null){
-				dout.close();
+			if (out != null) {
+				out.close();
 			}
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
