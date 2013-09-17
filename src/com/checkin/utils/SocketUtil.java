@@ -16,7 +16,7 @@ import android.content.Context;
 public class SocketUtil {
 
 	Socket socket;
-	PreferGeter geter;
+	PreferGeter geter; 
 	String IP;
 	String username, password, workcode;
 	BufferedReader in;
