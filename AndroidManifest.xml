@@ -28,8 +28,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="com.checkin.LoginActivity"
-             android:label="登陆"></activity>
+        
         <activity android:name="com.checkin.MainActivity"
              android:label="主页"></activity>
          <activity android:name="com.checkin.RegistActivity"
