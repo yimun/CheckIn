@@ -23,12 +23,6 @@ public class PreferGeter {
 		return sp.getString("ip_set", "NULL");
 	}
 
-	public int getPort() {
-		
-		String temp = sp.getString("port_set", "0");
-		return Integer.parseInt(temp);
-
-	}
 
 	public int getType() {
 		return sp.getInt("type_set", 1);

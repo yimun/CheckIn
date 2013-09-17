@@ -8,29 +8,35 @@ import java.net.Socket;
 
 import android.content.Context;
 
+/**
+ * socket连接类
+ * @author linwei
+ *
+ */
 public class SocketUtil {
 
 	Socket socket;
 	PreferGeter geter;
-	int port;
 	String IP;
 	String username, password, workcode;
 	BufferedReader in;
 	PrintWriter out;
 
-	public boolean isConnected = false;
+	public boolean isConnected = false;	
 
 	public SocketUtil(Context con) {
 
 		geter = new PreferGeter(con);
-		port = geter.getPort();
 		IP = geter.getIP();
 		username = geter.getUnm();
 		password = geter.getPwd();
 		workcode = geter.getWcd();
 	}
 
-	// 连接服务器
+	/**
+	 * 连接至服务器
+	 * @throws Exception
+	 */
 	public void connectServer() throws Exception {
 
 		if (socket != null) {
@@ -38,7 +44,7 @@ public class SocketUtil {
 		}
 		try {
 			// socket = new Socket("192.168.0.1",9999);
-			socket = new Socket(IP, port);
+			socket = new Socket(IP, 9000);
 			in = new BufferedReader(new InputStreamReader(
 					socket.getInputStream()));
 			out = new PrintWriter(socket.getOutputStream());
@@ -52,13 +58,20 @@ public class SocketUtil {
 		}
 	}
 
-	// 注册
+	/**
+	 * 注册用户
+	 * @param username
+	 * @param pwd
+	 * @param workcode
+	 * @return isSuccess
+	 */
 	public boolean register(String username, String pwd, String workcode) {
 		boolean isSuccess = false;
 		try {
 			out.println("create;" + username + ";" + pwd + ";" + workcode);
+			out.flush();
 			String getstr = in.readLine();
-			System.out.println(getstr);
+			System.out.println("registget="+getstr);
 			if (getstr.equals("USERCREATED")) {
 				isSuccess = true;
 			}
@@ -68,15 +81,19 @@ public class SocketUtil {
 		return isSuccess;
 	}
 
-	// 登陆向服务器发送签到的信息
+	/**
+	 * 发送签到信息
+	 * @return isSuccess
+	 */
 	public boolean sendCheck() {
 
 		boolean isSuccess = false;
 
 		try {
 			out.println("check;" + username + ";" + password + ";" + workcode);
+			out.flush();
 			String getstr = in.readLine();
-			System.out.println(getstr);
+			System.out.println("checkget="+getstr);
 			if(getstr.equals("LOGINSUCCESS")){
 				isSuccess = true;
 			}
@@ -88,6 +105,9 @@ public class SocketUtil {
 		return isSuccess;
 	}
 
+	/**
+	 * 关闭服务器连接
+	 */
 	public void close() {
 		try {
 			if (socket != null) {
