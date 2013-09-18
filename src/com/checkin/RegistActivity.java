@@ -17,6 +17,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.checkin.service.MyService;
 import com.checkin.utils.PreferGeter;
 import com.checkin.utils.SocketUtil;
 
@@ -186,6 +187,7 @@ public class RegistActivity extends Activity {
 											int which) {
 
 										saveUser(); // 保存用户名密码
+										startService(new Intent(RegistActivity.this,MyService.class));
 										startActivity(new Intent(
 												RegistActivity.this,
 												MainActivity.class));

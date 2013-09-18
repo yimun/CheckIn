@@ -13,6 +13,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
         android:text="签到状态：" />
 
     <TextView
@@ -21,26 +22,27 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/textView2"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="55dp"
         android:text="Medium Text"
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
-    <Button
-        android:id="@+id/stop"
+    <TextView
+        android:id="@+id/textView1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/start"
+        android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="81dp"
-        android:text="关闭服务" />
+        android:layout_marginTop="32dp"
+        android:text="当前用户：" />
 
-    <Button
-        android:id="@+id/start"
+    <TextView
+        android:id="@+id/user"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/showstate"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="148dp"
-        android:text="开始服务" />
+        android:layout_alignLeft="@+id/showstate"
+        android:layout_below="@+id/textView1"
+        android:layout_marginTop="34dp"
+        android:text="Medium Text"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
 
 </RelativeLayout>

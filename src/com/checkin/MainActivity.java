@@ -14,11 +14,13 @@ import android.widget.Toast;
 
 import com.checkin.service.MyService;
 import com.checkin.service.UpdateUIReceiver;
+import com.checkin.utils.PreferGeter;
 
 public class MainActivity extends Activity {
 
 	TextView tv;
-	Button start_btn, stop_btn;
+	TextView user;
+	//Button start_btn, stop_btn;
 	UpdateUIReceiver updateuiRec;
 	final String UPDATE_ACTION = "com.checkin.updateui";
 	Intent s;
@@ -29,22 +31,17 @@ public class MainActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 		s = new Intent(this, MyService.class);
-
 		tv = (TextView) findViewById(R.id.showstate);
-		start_btn = (Button) findViewById(R.id.start);
-		stop_btn = (Button) findViewById(R.id.stop);
+		user = (TextView) findViewById(R.id.user);
+		/*start_btn = (Button) findViewById(R.id.start);
+		stop_btn = (Button) findViewById(R.id.stop);*/
 		
-		if(MyService.isCheck){
-			tv.setText("ÒÑ×¢²áÉÏ°à×´Ì¬");
-		}else{
-			tv.setText("Î´×¢²áÉÏ°à×´Ì¬");
-		}
 		updateuiRec = new UpdateUIReceiver(tv);
 		IntentFilter inf = new IntentFilter();
 		inf.addAction(UPDATE_ACTION);
 		this.registerReceiver(updateuiRec, inf);
 
-		start_btn.setOnClickListener(new OnClickListener() {
+		/*start_btn.setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
@@ -65,7 +62,7 @@ public class MainActivity extends Activity {
 			}
 
 		});
-
+*/
 	}
 
 	@Override
@@ -85,12 +82,12 @@ public class MainActivity extends Activity {
 	public boolean onOptionsItemSelected(MenuItem item) {
 
 		switch (item.getItemId()) {
-		case R.id.item1:
+		/*case R.id.item1:
 
 			startActivity(new Intent(this, Setting.class));
-			break;
+			break;*/
 
-		case R.id.item2:
+		case R.id.item1:
 
 			startActivity(new Intent(this, RegistActivity.class));
 			break;
@@ -99,6 +96,16 @@ public class MainActivity extends Activity {
 		}
 		return super.onOptionsItemSelected(item);
 
+	}
+	
+	public void onResume(){
+		super.onResume();
+		user.setText(new PreferGeter(this).getUnm());
+		if(MyService.isCheck){
+			tv.setText("ÒÑ×¢²áÉÏ°à×´Ì¬");
+		}else{
+			tv.setText("Î´×¢²áÉÏ°à×´Ì¬");
+		}
 	}
 
 }

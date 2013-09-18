@@ -23,7 +23,7 @@ public class NetworkChangeReceiver extends BroadcastReceiver {
 				NetworkInfo networkInfo = (NetworkInfo) parcelableExtra;
 				State state = networkInfo.getState();
 				if (state == State.CONNECTED) { // 表示wifi状态改变
-					Log.i("receiver", "成功连接上了");
+					Log.i("receiver", "wifi状态改变");
 					// start service
 					Intent s = new Intent(ctx, MyService.class);
 					ctx.startService(s);

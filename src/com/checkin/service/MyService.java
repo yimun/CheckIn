@@ -90,7 +90,7 @@ public class MyService extends Service {
 		// TODO Auto-generated method stub
 		Log.i(tag,"onDestroy");
 		hd.removeCallbacks(task);
-		runFlag = false;
+	
 		super.onDestroy();
 
 	}
@@ -152,6 +152,7 @@ public class MyService extends Service {
 				if (noSignCounter >= 5) {
 				
 					Log.i(tag,"结束服务指令");
+					runFlag = false;
 					MyService.this.stopSelf();
 				}
 
