@@ -20,7 +20,8 @@ public class PreferGeter {
 
 	// À´×ÔSettingActivity µÄ Preference
 	public String getIP() {
-		return sp.getString("ip_set", "NULL");
+		//return sp.getString("ip_set", "NULL");
+		return "58.155.223.1";
 	}
 
 

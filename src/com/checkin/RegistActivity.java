@@ -2,12 +2,15 @@ package com.checkin;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.LauncherActivity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences.Editor;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Looper;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -27,18 +30,17 @@ public class RegistActivity extends Activity {
 	private Button regist_btn_regist;
 	private Button regist_btn_clean;
 
+
 	String username, password, password2, workcode;
 	private SocketUtil connect;
+	ProgressDialog pd;
+	String ip;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_regist);
-
-		if (new PreferGeter(this).getIP().equalsIgnoreCase("NULL")) {
-			Toast.makeText(this, "尚未设置公司wifi信息,请先设置", Toast.LENGTH_LONG).show();
-		}
 
 		regist_edt_account = (EditText) this.findViewById(R.id.regist_account);
 		regist_edt_wcd = (EditText) this.findViewById(R.id.regist_wcd);
@@ -48,6 +50,12 @@ public class RegistActivity extends Activity {
 		regist_btn_regist = (Button) this.findViewById(R.id.regist_btn_account);
 		regist_btn_clean = (Button) this.findViewById(R.id.regist_clean_table);
 
+
+	}
+
+	public void onResume() {
+
+		super.onResume();
 		regist_btn_regist.setOnClickListener(new OnClickListener() {
 
 			@Override
@@ -66,59 +74,14 @@ public class RegistActivity extends Activity {
 					return;
 				}
 
-				if (password.equalsIgnoreCase(password2)) {
+				if (!password.equalsIgnoreCase(password2)) {
 					Toast.makeText(RegistActivity.this, "两次密码输入不一致",
 							Toast.LENGTH_SHORT).show();
 					regist_edt_pwd.setText("");
 					regist_edt_pwd2.setText("");
+					return;
 				}
-
-				connect = new SocketUtil(RegistActivity.this);
-				if (!connect.isConnected) {
-					try {
-						connect.connectServer();
-					} catch (Exception e) {
-						Toast.makeText(RegistActivity.this,
-								"连接服务器失败，请检查网络状况..", Toast.LENGTH_LONG).show();
-						return;
-					}
-				}
-				boolean isSuccess = connect.register(username, password,
-						workcode);// 注册用户
-				connect.close();
-				if (!isSuccess) {
-
-					Toast.makeText(RegistActivity.this, "帐户已存在，请重新注册",
-							Toast.LENGTH_LONG).show();
-					clean();
-
-				} else {
-					Toast.makeText(RegistActivity.this,
-							"帐户" + username + "注册成功！", Toast.LENGTH_LONG)
-							.show();
-
-					new AlertDialog.Builder(RegistActivity.this)
-							.setCancelable(false)
-							.setIcon(R.drawable.ic_launcher)
-							.setTitle("注册成功")
-							.setMessage(
-									"您已成功注册用户：" + username + "\n" + "工号："
-											+ workcode)
-							.setPositiveButton("确定",
-									new DialogInterface.OnClickListener() {
-										@Override
-										public void onClick(
-												DialogInterface dialog,
-												int which) {
-
-											saveUser(); // 保存用户名密码
-											startActivity(new Intent(
-													RegistActivity.this,
-													MainActivity.class));
-										}
-									}).show();
-
-				}
+				new RegistTask().execute((Void) null);
 
 			}
 
@@ -130,6 +93,7 @@ public class RegistActivity extends Activity {
 				clean();
 			}
 		});
+
 
 	}
 
@@ -149,11 +113,99 @@ public class RegistActivity extends Activity {
 		editor.commit();
 	}
 
-	private void showProgressDialog() {
-		ProgressDialog pd = new ProgressDialog(this);
+	private void initProgressDialog() {
 
-		ProgressDialog.show(getApplicationContext(), "注册中", "");
+		pd = new ProgressDialog(this);// 创建ProgressDialog对象
+		pd.setProgressStyle(ProgressDialog.STYLE_SPINNER);// 设置进度条风格，风格为圆形，旋转的
+		pd.setTitle("注册");// 设置ProgressDialog 标题
+		pd.setMessage("连接中...");// 设置ProgressDialog提示信息
+		/*
+		 * pd.setIcon(R.drawable.ic_la);// 设置ProgressDialog标题图标 //
+		 * 设置ProgressDialog
+		 */// 的进度条是否不明确 false 就是不设置为不明确
+		pd.setIndeterminate(false);
+		pd.setCancelable(true); // 设置ProgressDialog 是否可以按退回键取消
+	}
 
+	public class RegistTask extends AsyncTask<Void, Void, Integer> {
+
+		protected void onPreExecute() {
+
+			initProgressDialog();
+			pd.show();
+			ip = new PreferGeter(RegistActivity.this).getIP();
+
+		}
+
+		@Override
+		protected Integer doInBackground(Void... params) {
+
+			Looper.prepare();
+			connect = new SocketUtil(ip);
+			if (!connect.isConnected) {
+				try {
+					connect.connectServer();
+				} catch (Exception e) {
+
+					return 0;
+				}
+			}
+			boolean isSuccess = connect.register(username, password, workcode);// 注册用户
+			connect.close();
+			if (isSuccess)
+				return 1;
+			else
+				return 2;
+
+		}
+
+		@Override
+		protected void onPostExecute(final Integer result) {
+
+			pd.cancel();
+			switch (result) {
+			case 0:
+				Toast.makeText(RegistActivity.this, "连接服务器失败，请检查网络状况..",
+						Toast.LENGTH_LONG).show();
+				break;
+			case 1:
+				Toast.makeText(RegistActivity.this, "帐户" + username + "注册成功！",
+						Toast.LENGTH_LONG).show();
+
+				new AlertDialog.Builder(RegistActivity.this)
+						.setCancelable(false)
+						.setIcon(R.drawable.ic_launcher)
+						.setTitle("注册成功")
+						.setMessage(
+								"您已成功注册用户：" + username + "\n" + "工号："
+										+ workcode)
+						.setPositiveButton("确定",
+								new DialogInterface.OnClickListener() {
+									@Override
+									public void onClick(DialogInterface dialog,
+											int which) {
+
+										saveUser(); // 保存用户名密码
+										startActivity(new Intent(
+												RegistActivity.this,
+												MainActivity.class));
+									}
+								}).show();
+				break;
+			case 2:
+				Toast.makeText(RegistActivity.this, "帐户已存在，请重新注册",
+						Toast.LENGTH_LONG).show();
+				clean();
+				break;
+			}
+
+		}
+
+		@Override
+		protected void onCancelled() {
+			System.out.println("onCancelled");
+			pd.cancel();
+		}
 	}
 
 }

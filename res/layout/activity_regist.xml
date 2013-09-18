@@ -37,7 +37,11 @@
                 android:layout_height="wrap_content"
                 android:layout_marginRight="5px"
                 android:layout_weight="1"
-                android:inputType="number" />
+                android:focusableInTouchMode="true"
+                android:inputType="text" >
+                
+                 <requestFocus />
+            </EditText>
 
         </TableRow>
 
@@ -55,10 +59,10 @@
                 android:layout_height="wrap_content"
                 android:layout_marginRight="5px"
                 android:layout_weight="1"
-                android:inputType="textPassword" >
+                android:inputType="number" />
 
-                <requestFocus />
-            </EditText>
+               
+        
         </TableRow>
 
         <TableRow
@@ -94,7 +98,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginRight="5px"
-                android:layout_weight="1" />
+                android:layout_weight="1"
+                android:inputType="textPassword" />
 
         </TableRow>
     </TableLayout>

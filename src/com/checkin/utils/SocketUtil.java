@@ -16,21 +16,16 @@ import android.content.Context;
 public class SocketUtil {
 
 	Socket socket;
-	PreferGeter geter; 
 	String IP;
-	String username, password, workcode;
 	BufferedReader in;
 	PrintWriter out;
 
 	public boolean isConnected = false;	
 
-	public SocketUtil(Context con) {
+	public SocketUtil(String ip) {
 
-		geter = new PreferGeter(con);
-		IP = geter.getIP();
-		username = geter.getUnm();
-		password = geter.getPwd();
-		workcode = geter.getWcd();
+		this.IP = ip;
+		
 	}
 
 	/**
@@ -85,7 +80,7 @@ public class SocketUtil {
 	 * 发送签到信息
 	 * @return isSuccess
 	 */
-	public boolean sendCheck() {
+	public boolean sendCheck(String username,String password,String workcode) {
 
 		boolean isSuccess = false;
 

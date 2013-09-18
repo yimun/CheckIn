@@ -33,6 +33,12 @@ public class MainActivity extends Activity {
 		tv = (TextView) findViewById(R.id.showstate);
 		start_btn = (Button) findViewById(R.id.start);
 		stop_btn = (Button) findViewById(R.id.stop);
+		
+		if(MyService.isCheck){
+			tv.setText("ÒÑ×¢²áÉÏ°à×´Ì¬");
+		}else{
+			tv.setText("Î´×¢²áÉÏ°à×´Ì¬");
+		}
 		updateuiRec = new UpdateUIReceiver(tv);
 		IntentFilter inf = new IntentFilter();
 		inf.addAction(UPDATE_ACTION);

@@ -20,8 +20,10 @@ public class UpdateUIReceiver extends BroadcastReceiver{
 		switch(tempstate){
 		case 0:
 			tv.setText("ÒÑ×¢²áÉÏ°à×´Ì¬");
+			break;
 		case 1:
 			tv.setText("Î´×¢²áÉÏ°à×´Ì¬");
+			break;
 		}
 	}
 	
