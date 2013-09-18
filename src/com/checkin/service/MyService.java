@@ -40,7 +40,7 @@ public class MyService extends Service {
 				Log.i(tag, "发送首次签到成功通知");
 				showNotifArri(MyService.this);
 				in =new Intent();
-				in.setAction("com.checkin.updateui");
+				in.setAction(UPDATE_ACTION);
 				in.putExtra("state", 0);
 				sendBroadcast(in);
 				break;
@@ -48,7 +48,7 @@ public class MyService extends Service {
 				Log.i(tag, "发送离开通知通知");
 				showNotifLeav(MyService.this);
 				in =new Intent();
-				in.setAction("com.checkin.updateui");
+				in.setAction(UPDATE_ACTION);
 				in.putExtra("state", 1);
 				sendBroadcast(in);
 				break;
