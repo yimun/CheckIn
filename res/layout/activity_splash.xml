@@ -9,7 +9,7 @@
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="138dp"
-        android:text="手机签到"
+        android:text="811手机签到"
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
 </RelativeLayout>

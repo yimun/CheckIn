@@ -21,13 +21,13 @@ import com.checkin.utils.WifiAdmin.WifiCipherType;
 
 public class MyService extends Service {
 
-	static int intCounter ;
+	static int intCounter;
 	static boolean runFlag = true;
-	static final int DELAY = 10000; // 刷新频率5分钟
-	static int noSignCounter ;
+	static final int DELAY = 120000; // 刷新频率5分钟
+	static int noSignCounter;
 	final String UPDATE_ACTION = "com.checkin.updateui";// 更新前台UI
 	String tag = "wifi service";
-	public static boolean isCheck  = false;
+	public static boolean isCheck = false;
 	ScanTask task;
 	Intent in;
 
@@ -39,7 +39,7 @@ public class MyService extends Service {
 			case 0:
 				Log.i(tag, "发送首次签到成功通知");
 				showNotifArri(MyService.this);
-				in =new Intent();
+				in = new Intent();
 				in.setAction(UPDATE_ACTION);
 				in.putExtra("state", 0);
 				sendBroadcast(in);
@@ -47,7 +47,7 @@ public class MyService extends Service {
 			case 1:
 				Log.i(tag, "发送离开通知通知");
 				showNotifLeav(MyService.this);
-				in =new Intent();
+				in = new Intent();
 				in.setAction(UPDATE_ACTION);
 				in.putExtra("state", 1);
 				sendBroadcast(in);
@@ -60,7 +60,7 @@ public class MyService extends Service {
 	@Override
 	public void onStart(Intent intent, int startId) {
 		// TODO Auto-generated method stub
-		
+
 		super.onStart(intent, startId);
 		Log.i(tag, "onStart");
 		noSignCounter = intCounter = 0;
@@ -75,7 +75,7 @@ public class MyService extends Service {
 
 		super.onCreate();
 		Log.i(tag, "启动服务");
-		
+
 	}
 
 	@Override
@@ -88,9 +88,9 @@ public class MyService extends Service {
 	public void onDestroy() {
 
 		// TODO Auto-generated method stub
-		Log.i(tag,"onDestroy");
+		Log.i(tag, "onDestroy");
 		hd.removeCallbacks(task);
-	
+
 		super.onDestroy();
 
 	}
@@ -128,7 +128,7 @@ public class MyService extends Service {
 						connect.close();
 					} catch (Exception e) {
 						e.printStackTrace();
-						Log.i(tag,"noSignCounter="+noSignCounter);
+						Log.i(tag, "noSignCounter=" + noSignCounter);
 						noSignCounter++; // 连接失败次数统计
 					}
 				}
@@ -139,9 +139,8 @@ public class MyService extends Service {
 					Message tempMessage = new Message();
 					tempMessage.what = 0;
 					MyService.this.hd.sendMessage(tempMessage);
-					
-
-				} else if (isCheck && !get) { // 离开
+				}
+				if (isCheck && !get) { // 离开
 					isCheck = false;
 					Message tempMessage = new Message();
 					tempMessage.what = 1;
@@ -150,8 +149,8 @@ public class MyService extends Service {
 
 				// 连续5次无响应，则结束服务
 				if (noSignCounter >= 5) {
-				
-					Log.i(tag,"结束服务指令");
+
+					Log.i(tag, "结束服务指令");
 					runFlag = false;
 					MyService.this.stopSelf();
 				}
@@ -161,7 +160,7 @@ public class MyService extends Service {
 					Thread.sleep(DELAY);
 				} catch (InterruptedException e) {
 					Log.i(tag, "InterruptedException runflag = false");
-					//MyService.runFlag = false;
+					// MyService.runFlag = false;
 				}
 			}
 
@@ -170,29 +169,22 @@ public class MyService extends Service {
 
 	public void showNotifArri(Context context) {
 
-		String title;
-		String content;
-
 		// 消息通知栏 // 定义NotificationManager
 		NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 
-		// 定义通知栏展现的内容信息
-
+		int icon = R.drawable.ic_launcher;
+		CharSequence title = "注册成功";
 		long when = System.currentTimeMillis();
 
-		title = "注册成功";
-		content = "您已成功注册到公司";
-
-		Notification notification = new Notification.Builder(context)
-				.setContentTitle(title).setContentText(content)
-				.setSmallIcon(R.drawable.ic_launcher).build();
+		Notification notification = new Notification(icon, title, when);
+		// 把通知放置在"正在运行"栏目中
+		notification.flags |= Notification.FLAG_ONGOING_EVENT;
 
 		// 定义下拉通知栏时要展现的内容信息
 		CharSequence contentTitle = "注册成功";
-		CharSequence contentText = "您已成功注册到公司";
-		Intent notificationIntent = new Intent(context, MainActivity.class);
-		PendingIntent contentIntent = PendingIntent.getActivity(this, 0,
-				notificationIntent, 0);
+		CharSequence contentText = "您已成功注册811";
+		Intent in = new Intent(context, MainActivity.class);
+		PendingIntent contentIntent = PendingIntent.getActivity(this, 0, in, 0);
 		notification.setLatestEventInfo(context, contentTitle, contentText,
 				contentIntent);
 
@@ -200,32 +192,23 @@ public class MyService extends Service {
 		mNotificationManager.notify(1, notification);
 
 	}
-	
-	public void showNotifLeav(Context context) {
 
-		String title;
-		String content;
+	public void showNotifLeav(Context context) {
 
 		// 消息通知栏 // 定义NotificationManager
 		NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 
+		int icon = R.drawable.ic_launcher;
 		// 定义通知栏展现的内容信息
-
 		long when = System.currentTimeMillis();
-
-		title = "离开";
-		content = "您已离开公司";
-
-		Notification notification = new Notification.Builder(context)
-				.setContentTitle(title).setContentText(content)
-				.setSmallIcon(R.drawable.ic_launcher).build();
-
+		CharSequence title = "离开";
+		Notification notification = new Notification(icon, title, when);
+		notification.flags |= Notification.FLAG_ONGOING_EVENT;
 		// 定义下拉通知栏时要展现的内容信息
 		CharSequence contentTitle = "离开";
-		CharSequence contentText = "您已离开公司";
-		Intent notificationIntent = new Intent(context, MainActivity.class);
-		PendingIntent contentIntent = PendingIntent.getActivity(this, 0,
-				notificationIntent, 0);
+		CharSequence contentText = "您已离开811";
+		Intent in = new Intent(context, MainActivity.class);
+		PendingIntent contentIntent = PendingIntent.getActivity(this, 0, in, 0);
 		notification.setLatestEventInfo(context, contentTitle, contentText,
 				contentIntent);
 
