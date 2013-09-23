@@ -66,8 +66,7 @@ public class MyService extends Service {
 		noSignCounter = intCounter = 0;
 		isCheck = false;
 		runFlag = true;
-		task = new ScanTask(this);
-		task.start();
+		
 	}
 
 	@Override
@@ -75,6 +74,8 @@ public class MyService extends Service {
 
 		super.onCreate();
 		Log.i(tag, "Æô¶¯·þÎñ");
+		task = new ScanTask(this);
+		task.start();
 
 	}
 
