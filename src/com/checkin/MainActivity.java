@@ -1,16 +1,17 @@
 package com.checkin;
 
+import java.util.ArrayList;
+
 import android.app.Activity;
+import android.app.ActivityManager;
+import android.app.ActivityManager.RunningServiceInfo;
+import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.View.OnClickListener;
-import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.checkin.service.MyService;
 import com.checkin.service.UpdateUIReceiver;
@@ -20,7 +21,7 @@ public class MainActivity extends Activity {
 
 	TextView tv;
 	TextView user;
-	//Button start_btn, stop_btn;
+	// Button start_btn, stop_btn;
 	UpdateUIReceiver updateuiRec;
 	final String UPDATE_ACTION = "com.checkin.updateui";
 	Intent s;
@@ -33,36 +34,12 @@ public class MainActivity extends Activity {
 		s = new Intent(this, MyService.class);
 		tv = (TextView) findViewById(R.id.showstate);
 		user = (TextView) findViewById(R.id.user);
-		/*start_btn = (Button) findViewById(R.id.start);
-		stop_btn = (Button) findViewById(R.id.stop);*/
-		
+	
+
 		updateuiRec = new UpdateUIReceiver(tv);
 		IntentFilter inf = new IntentFilter();
 		inf.addAction(UPDATE_ACTION);
 		this.registerReceiver(updateuiRec, inf);
-
-		/*start_btn.setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-				// TODO Auto-generated method stub
-				MainActivity.this.startService(s);
-				Toast.makeText(getApplicationContext(), "开始服务", Toast.LENGTH_SHORT).show();
-			}
-
-		});
-
-		stop_btn.setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-				// TODO Auto-generated method stub
-				MainActivity.this.stopService(s);
-				Toast.makeText(getApplicationContext(), "停止服务", Toast.LENGTH_SHORT).show();
-			}
-
-		});
-*/
 	}
 
 	@Override
@@ -82,10 +59,11 @@ public class MainActivity extends Activity {
 	public boolean onOptionsItemSelected(MenuItem item) {
 
 		switch (item.getItemId()) {
-		/*case R.id.item1:
-
-			startActivity(new Intent(this, Setting.class));
-			break;*/
+		/*
+		 * case R.id.item1:
+		 * 
+		 * startActivity(new Intent(this, Setting.class)); break;
+		 */
 
 		case R.id.item1:
 
@@ -97,15 +75,37 @@ public class MainActivity extends Activity {
 		return super.onOptionsItemSelected(item);
 
 	}
-	
-	public void onResume(){
+
+	public void onResume() {
 		super.onResume();
+		if(!isWorked()){
+			startService(new Intent(this,MyService.class));
+		}
 		user.setText(new PreferGeter(this).getUnm());
-		if(MyService.isCheck){
+		if (MyService.isCheck) {
 			tv.setText("已注册上班状态");
-		}else{
+		} else {
 			tv.setText("未注册上班状态");
 		}
+	}
+
+	/**
+	 * 判断该服务是否存在
+	 * 
+	 * @return
+	 */
+	public boolean isWorked() {
+		ActivityManager myManager = (ActivityManager) this
+				.getSystemService(Context.ACTIVITY_SERVICE);
+		ArrayList<RunningServiceInfo> runningService = (ArrayList<RunningServiceInfo>) myManager
+				.getRunningServices(30);
+		for (int i = 0; i < runningService.size(); i++) {
+			if (runningService.get(i).service.getClassName().toString()
+					.equals("com.checkin.service.MyService")) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 }
