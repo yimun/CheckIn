@@ -22,7 +22,7 @@ public class MyService extends Service {
 
 	static int intCounter;
 	static boolean runFlag = true;
-	static final int DELAY = 120000; // 刷新频率2分钟
+	static final int DELAY = 60000; // 刷新频率2分钟
 	static int noSignCounter;
 	final String UPDATE_ACTION = "com.checkin.updateui";// 更新前台UI
 	String tag = "wifi service";
