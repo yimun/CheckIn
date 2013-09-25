@@ -19,7 +19,8 @@
         <TableRow
             android:id="@+id/tableRow1"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" >
+            android:layout_height="wrap_content"
+            android:background="@drawable/row_2" >
 
             <TextView
                 android:id="@+id/textView1"
@@ -36,7 +37,7 @@
                 android:layout_height="wrap_content"
                 android:text="Medium Text"
                 android:textAppearance="?android:attr/textAppearanceMedium"
-                android:textSize="25sp" />
+                android:textSize="23sp" />
 
         </TableRow>
 
@@ -44,7 +45,8 @@
             android:id="@+id/tableRow2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="40dp" >
+            android:layout_marginTop="40dp"
+            android:background="@drawable/row_2" >
 
             <TextView
                 android:id="@+id/textView2"
@@ -61,7 +63,7 @@
                 android:layout_height="wrap_content"
                 android:text="Medium Text"
                 android:textAppearance="?android:attr/textAppearanceMedium"
-                android:textSize="25sp" />
+                android:textSize="23sp" />
 
         </TableRow>
     </TableLayout>
