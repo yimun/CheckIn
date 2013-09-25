@@ -10,6 +10,12 @@ import android.net.wifi.WifiManager;
 import android.net.wifi.WifiManager.WifiLock;
 import android.util.Log;
 
+
+/**
+ * wifi操作类（弃用）
+ * @author Administrator
+ *
+ */
 public class WifiAdmin {
 	// 定义WifiManager对象
 	private WifiManager mWifiManager;

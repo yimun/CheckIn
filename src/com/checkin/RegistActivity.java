@@ -21,6 +21,12 @@ import com.checkin.service.MyService;
 import com.checkin.utils.PreferGeter;
 import com.checkin.utils.SocketUtil;
 
+/**
+ * 注册界面
+ * 
+ * @author Administrator
+ * 
+ */
 public class RegistActivity extends Activity {
 
 	boolean regist_group_rs = false;
@@ -30,7 +36,6 @@ public class RegistActivity extends Activity {
 	private EditText regist_edt_pwd, regist_edt_pwd2;
 	private Button regist_btn_regist;
 	private Button regist_btn_clean;
-
 
 	String username, password, password2, workcode;
 	private SocketUtil connect;
@@ -43,20 +48,20 @@ public class RegistActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_regist);
 
+		// 控件初始化
 		regist_edt_account = (EditText) this.findViewById(R.id.regist_account);
 		regist_edt_wcd = (EditText) this.findViewById(R.id.regist_wcd);
 		regist_edt_pwd = (EditText) this.findViewById(R.id.regist_psw);
 		regist_edt_pwd2 = (EditText) this.findViewById(R.id.regist_psw2);
-
 		regist_btn_regist = (Button) this.findViewById(R.id.regist_btn_account);
 		regist_btn_clean = (Button) this.findViewById(R.id.regist_clean_table);
-
 
 	}
 
 	public void onResume() {
 
 		super.onResume();
+		// 注册按钮的监听
 		regist_btn_regist.setOnClickListener(new OnClickListener() {
 
 			@Override
@@ -95,17 +100,22 @@ public class RegistActivity extends Activity {
 			}
 		});
 
-
 	}
 
-	void clean() {
+	/**
+	 * 重置输入框
+	 */
+	private void clean() {
 		regist_edt_account.setText("");
 		regist_edt_wcd.setText("");
 		regist_edt_pwd.setText("");
 		regist_edt_pwd2.setText("");
 	}
 
-	void saveUser() {
+	/**
+	 * 保存用户名密码
+	 */
+	private void saveUser() {
 		Editor editor;
 		editor = this.getSharedPreferences("user", Context.MODE_PRIVATE).edit();
 		editor.putString("username", username);
@@ -114,6 +124,9 @@ public class RegistActivity extends Activity {
 		editor.commit();
 	}
 
+	/**
+	 * 初始化进度条
+	 */
 	private void initProgressDialog() {
 
 		pd = new ProgressDialog(this);// 创建ProgressDialog对象
@@ -128,8 +141,15 @@ public class RegistActivity extends Activity {
 		pd.setCancelable(true); // 设置ProgressDialog 是否可以按退回键取消
 	}
 
+	/**
+	 * 执行注册的后台任务
+	 * 
+	 * @author Administrator
+	 * 
+	 */
 	public class RegistTask extends AsyncTask<Void, Void, Integer> {
 
+		// 预执行
 		protected void onPreExecute() {
 
 			initProgressDialog();
@@ -138,6 +158,7 @@ public class RegistActivity extends Activity {
 
 		}
 
+		// 后台线程
 		@Override
 		protected Integer doInBackground(Void... params) {
 
@@ -160,6 +181,7 @@ public class RegistActivity extends Activity {
 
 		}
 
+		// 结果处理
 		@Override
 		protected void onPostExecute(final Integer result) {
 
@@ -173,6 +195,7 @@ public class RegistActivity extends Activity {
 				Toast.makeText(RegistActivity.this, "帐户" + username + "注册成功！",
 						Toast.LENGTH_LONG).show();
 
+				// 弹出对话框
 				new AlertDialog.Builder(RegistActivity.this)
 						.setCancelable(false)
 						.setIcon(R.drawable.ic_launcher)
@@ -187,7 +210,9 @@ public class RegistActivity extends Activity {
 											int which) {
 
 										saveUser(); // 保存用户名密码
-										startService(new Intent(RegistActivity.this,MyService.class));
+										startService(new Intent(
+												RegistActivity.this,
+												MyService.class));
 										startActivity(new Intent(
 												RegistActivity.this,
 												MainActivity.class));
@@ -203,6 +228,7 @@ public class RegistActivity extends Activity {
 
 		}
 
+		// 取消
 		@Override
 		protected void onCancelled() {
 			System.out.println("onCancelled");

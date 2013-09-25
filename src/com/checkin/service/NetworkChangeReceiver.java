@@ -10,6 +10,11 @@ import android.net.wifi.WifiManager;
 import android.os.Parcelable;
 import android.util.Log;
 
+/**
+ * 网络状态改变时接收广播并启动主服务
+ * @author Administrator
+ *
+ */
 public class NetworkChangeReceiver extends BroadcastReceiver {
 
 

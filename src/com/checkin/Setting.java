@@ -4,7 +4,11 @@ import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceScreen;
-
+/**
+ * 设置界面（暂时弃用）
+ * @author Administrator
+ *
+ */
 public class Setting extends PreferenceActivity {
 
 	@Override

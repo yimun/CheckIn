@@ -17,27 +17,32 @@ import com.checkin.R;
 import com.checkin.utils.PreferGeter;
 import com.checkin.utils.SocketUtil;
 import com.checkin.utils.WifiAdmin.WifiCipherType;
-
+/**
+ * 后台发送签到信息主服务，
+ * 判断是否能与服务器连接并发送消息
+ * @author Administrator
+ *
+ */
 public class MyService extends Service {
 
 	static int intCounter;
 	static boolean runFlag = true;
-	static final int DELAY = 60000; // 刷新频率2分钟
+	static final int DELAY = 2 * 60 * 1000; // 刷新频率2分钟
 	static int noSignCounter;
 	final String UPDATE_ACTION = "com.checkin.updateui";// 更新前台UI
-	String tag = "wifi service";
+	String tag = "MyService";
 	public static boolean isCheck = false;
 	ScanTask task;
 	Intent in;
 
-	// 定义网络检测信号返回值，上下班和无响应信号
+	// 接受网络检测信号返回值并更新UI线程
 	Handler hd = new Handler() {
 		@Override
 		public void handleMessage(Message msg) {
 			switch (msg.what) {
 			case 0:
 				Log.i(tag, "发送首次签到成功通知");
-				showNotifArri(MyService.this);
+				showNotif(MyService.this, true);
 				in = new Intent();
 				in.setAction(UPDATE_ACTION);
 				in.putExtra("state", 0);
@@ -45,7 +50,7 @@ public class MyService extends Service {
 				break;
 			case 1:
 				Log.i(tag, "发送离开通知通知");
-				showNotifLeav(MyService.this);
+				showNotif(MyService.this, false);
 				in = new Intent();
 				in.setAction(UPDATE_ACTION);
 				in.putExtra("state", 1);
@@ -55,6 +60,16 @@ public class MyService extends Service {
 			}
 		}
 	};
+	
+	@Override
+	public void onCreate() {
+
+		super.onCreate();
+		Log.i(tag, "onCreate()启动服务");
+		task = new ScanTask(this);
+		task.start();
+
+	}
 
 	@Override
 	public void onStart(Intent intent, int startId) {
@@ -65,18 +80,10 @@ public class MyService extends Service {
 		noSignCounter = intCounter = 0;
 		isCheck = false;
 		runFlag = true;
-		
-	}
-
-	@Override
-	public void onCreate() {
-
-		super.onCreate();
-		Log.i(tag, "启动服务");
-		task = new ScanTask(this);
-		task.start();
 
 	}
+
+
 
 	@Override
 	public IBinder onBind(Intent intent) {
@@ -90,11 +97,15 @@ public class MyService extends Service {
 		// TODO Auto-generated method stub
 		Log.i(tag, "onDestroy");
 		hd.removeCallbacks(task);
-
 		super.onDestroy();
 
 	}
 
+	/**
+	 * 后台扫描通信线程
+	 * @author Administrator
+	 *
+	 */
 	public class ScanTask extends Thread {
 
 		private SocketUtil connect;
@@ -167,46 +178,39 @@ public class MyService extends Service {
 		}
 	}
 
-	public void showNotifArri(Context context) {
+	/**
+	 * 签到和离开的通知栏显示
+	 * 
+	 * @param context
+	 * @param isArrive
+	 *            是否为签到成功通知
+	 */
+	public void showNotif(Context context, boolean isArrive) {
 
-		// 消息通知栏 // 定义NotificationManager
-		NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-
-		int icon = R.drawable.ic_launcher;
-		CharSequence title = "注册成功";
-		long when = System.currentTimeMillis();
-
-		Notification notification = new Notification(icon, title, when);
-		// 把通知放置在"正在运行"栏目中
-		notification.flags |= Notification.FLAG_ONGOING_EVENT;
-
-		// 定义下拉通知栏时要展现的内容信息
-		CharSequence contentTitle = "注册成功";
-		CharSequence contentText = "您已成功注册811";
-		Intent in = new Intent(context, MainActivity.class);
-		PendingIntent contentIntent = PendingIntent.getActivity(this, 0, in, 0);
-		notification.setLatestEventInfo(context, contentTitle, contentText,
-				contentIntent);
-
-		// 用mNotificationManager的notify方法通知用户生成标题栏消息通知
-		mNotificationManager.notify(1, notification);
-
-	}
-
-	public void showNotifLeav(Context context) {
-
-		// 消息通知栏 // 定义NotificationManager
-		NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-
-		int icon = R.drawable.ic_launcher;
 		// 定义通知栏展现的内容信息
+		CharSequence title, contentTitle, contentText;
+		if (isArrive) {
+			title = "注册成功";
+			contentTitle = "注册成功";
+			contentText = "您已成功注册到811";
+
+		} else {
+			title = "离开";
+			contentTitle = "离开";
+			contentText = "您已离开811";
+		}
+
+		// 消息通知栏
+		// 定义NotificationManager
+		NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+		int icon = R.drawable.ic_launcher;
+
 		long when = System.currentTimeMillis();
-		CharSequence title = "离开";
 		Notification notification = new Notification(icon, title, when);
-		notification.flags |= Notification.FLAG_ONGOING_EVENT;
+		notification.defaults |= Notification.DEFAULT_SOUND;
+		notification.flags |= Notification.FLAG_AUTO_CANCEL;
+
 		// 定义下拉通知栏时要展现的内容信息
-		CharSequence contentTitle = "离开";
-		CharSequence contentText = "您已离开811";
 		Intent in = new Intent(context, MainActivity.class);
 		PendingIntent contentIntent = PendingIntent.getActivity(this, 0, in, 0);
 		notification.setLatestEventInfo(context, contentTitle, contentText,

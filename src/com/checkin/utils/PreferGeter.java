@@ -4,6 +4,11 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
+/**
+ * 获取保存在sharepreference中的用户信息
+ * @author Administrator
+ *
+ */
 public class PreferGeter {
 
 	private Context context;

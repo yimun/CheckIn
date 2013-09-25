@@ -9,7 +9,7 @@ import java.net.Socket;
 import android.content.Context;
 
 /**
- * socket连接类
+ * socket连接主类
  * @author linwei
  *
  */

@@ -31,7 +31,7 @@
         </activity>
         <activity
             android:name="com.checkin.MainActivity"
-            android:label="主页" >
+            android:label="811签到" >
         </activity>
         <activity
             android:name="com.checkin.RegistActivity"
