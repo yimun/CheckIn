@@ -8,7 +8,6 @@
         android:minSdkVersion="8"
         android:targetSdkVersion="17" />
 
-
     <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
     <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
@@ -41,6 +40,10 @@
             android:name="com.checkin.Setting"
             android:label="设置" >
         </activity>
+        <activity
+            android:name="com.checkin.ChangeMMActivity"
+            android:label="修改密码" >
+        </activity>
 
         <receiver android:name="com.checkin.service.NetworkChangeReceiver" >
             <intent-filter>
@@ -48,12 +51,17 @@
                 <action android:name="android.net.wifi.WIFI_STATE_CHANGED" />
                 <action android:name="android.net.wifi.STATE_CHANGE" />
             </intent-filter>
-         
         </receiver>
 
         <service
-            android:name=".service.MyService"
+            android:name="com.checkin.service.MyService"
             android:enabled="true" />
+
+        <activity
+            android:name="com.checkin.LoginActivity"
+            android:label="用户登录"
+            android:windowSoftInputMode="adjustResize|stateVisible" >
+        </activity>
     </application>
 
 </manifest>

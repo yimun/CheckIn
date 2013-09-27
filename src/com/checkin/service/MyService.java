@@ -78,7 +78,6 @@ public class MyService extends Service {
 		super.onStart(intent, startId);
 		Log.i(tag, "onStart");
 		noSignCounter = intCounter = 0;
-		isCheck = false;
 		runFlag = true;
 
 	}
@@ -114,19 +113,22 @@ public class MyService extends Service {
 		private String username, password, workcode;
 		WifiCipherType TYPE;
 		boolean get;
+		private Context context;
 
 		public ScanTask(Context con) {
-			geter = new PreferGeter(con);
-			ip = geter.getIP();
-			username = geter.getUnm();
-			password = geter.getPwd();
-			workcode = geter.getWcd();
+			this.context = con;
 		}
 
 		public void run() {
 			Looper.prepare();
 			while (runFlag) {
-
+				
+				geter = new PreferGeter(context);
+				ip = geter.getIP();
+				username = geter.getUnm();
+				password = geter.getPwd();
+				workcode = geter.getWcd();
+				
 				get = false;
 				intCounter++;
 				Log.i("CheckIn",

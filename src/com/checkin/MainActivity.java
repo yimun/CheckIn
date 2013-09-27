@@ -18,8 +18,9 @@ import com.checkin.utils.PreferGeter;
 
 /**
  * 主界面
+ * 
  * @author Administrator
- *
+ * 
  */
 public class MainActivity extends Activity {
 
@@ -36,7 +37,7 @@ public class MainActivity extends Activity {
 		setContentView(R.layout.activity_main);
 		tv = (TextView) findViewById(R.id.showstate);
 		user = (TextView) findViewById(R.id.user);
-	
+
 		// 注册更新的签到信息的广播
 		updateuiRec = new UpdateUIReceiver(tv);
 		IntentFilter inf = new IntentFilter();
@@ -61,15 +62,18 @@ public class MainActivity extends Activity {
 	public boolean onOptionsItemSelected(MenuItem item) {
 
 		switch (item.getItemId()) {
-		/*
-		 * case R.id.item1:
-		 * 
-		 * startActivity(new Intent(this, Setting.class)); break;
-		 */
 
 		case R.id.item1:
-
 			startActivity(new Intent(this, RegistActivity.class));
+			break;
+
+		case R.id.item2:
+
+			startActivity(new Intent(this, ChangeMMActivity.class));
+			break;
+		case R.id.item3:
+
+			startActivity(new Intent(this, LoginActivity.class));
 			break;
 		default:
 			break;
@@ -81,10 +85,10 @@ public class MainActivity extends Activity {
 	public void onResume() {
 		super.onResume();
 		// 判断服务是否开启，否则开启（待解决，存在找不到服务的错误）
-		/*if(!isWorked()){
-			System.out.println("服务不存在，开启");
-			startService(new Intent(this,MyService.class));
-		}*/
+		/*
+		 * if(!isWorked()){ System.out.println("服务不存在，开启"); startService(new
+		 * Intent(this,MyService.class)); }
+		 */
 		user.setText(new PreferGeter(this).getUnm());
 		if (MyService.isCheck) {
 			tv.setText("已注册上班状态");
@@ -96,32 +100,32 @@ public class MainActivity extends Activity {
 	}
 
 	/**
-	 * 判断该服务是否存在
-	 * 不存在则启动
+	 * 判断该服务是否存在 不存在则启动
+	 * 
 	 * @return
 	 */
 	public boolean isWorked() {
 
-        boolean isRunning = false;
-        ActivityManager activityManager = (ActivityManager)
-        		
-        this.getSystemService(Context.ACTIVITY_SERVICE); 
-        List<ActivityManager.RunningServiceInfo> serviceList 
-                   = activityManager.getRunningServices(30);
+		boolean isRunning = false;
+		ActivityManager activityManager = (ActivityManager)
 
-        if (!(serviceList.size()>0)) {
-            return false;
-        }
+		this.getSystemService(Context.ACTIVITY_SERVICE);
+		List<ActivityManager.RunningServiceInfo> serviceList = activityManager
+				.getRunningServices(30);
 
-        for (int i=0; i<serviceList.size(); i++) {
-        	System.out.println(serviceList.get(i).service.getClassName());
-            if (serviceList.get(i).service.getClassName().equals("com.checkin.service.MyService") == true) {
-                isRunning = true;
-                break;
-            }
-        }
-        return isRunning;
-    }
-	
+		if (!(serviceList.size() > 0)) {
+			return false;
+		}
+
+		for (int i = 0; i < serviceList.size(); i++) {
+			System.out.println(serviceList.get(i).service.getClassName());
+			if (serviceList.get(i).service.getClassName().equals(
+					"com.checkin.service.MyService") == true) {
+				isRunning = true;
+				break;
+			}
+		}
+		return isRunning;
+	}
 
 }

@@ -26,7 +26,7 @@ public class PreferGeter {
 	// À´×ÔSettingActivity µÄ Preference
 	public String getIP() {
 		//return sp.getString("ip_set", "NULL");
-		return "192.168.9.124";
+		return "192.168.9.114";
 	}
 
 

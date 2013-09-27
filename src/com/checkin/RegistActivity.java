@@ -37,10 +37,9 @@ public class RegistActivity extends Activity {
 	private Button regist_btn_regist;
 	private Button regist_btn_clean;
 
-	String username, password, password2, workcode;
+	private String username, password, password2, workcode,ip;
 	private SocketUtil connect;
-	ProgressDialog pd;
-	String ip;
+	private ProgressDialog pd;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -112,17 +111,7 @@ public class RegistActivity extends Activity {
 		regist_edt_pwd2.setText("");
 	}
 
-	/**
-	 * 保存用户名密码
-	 */
-	private void saveUser() {
-		Editor editor;
-		editor = this.getSharedPreferences("user", Context.MODE_PRIVATE).edit();
-		editor.putString("username", username);
-		editor.putString("password", password);
-		editor.putString("workcode", workcode);
-		editor.commit();
-	}
+	
 
 	/**
 	 * 初始化进度条
@@ -208,14 +197,9 @@ public class RegistActivity extends Activity {
 									@Override
 									public void onClick(DialogInterface dialog,
 											int which) {
-
-										saveUser(); // 保存用户名密码
-										startService(new Intent(
-												RegistActivity.this,
-												MyService.class));
 										startActivity(new Intent(
 												RegistActivity.this,
-												MainActivity.class));
+												LoginActivity.class));
 									}
 								}).show();
 				break;

@@ -1,0 +1,111 @@
+
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:background="@drawable/back" >
+
+        <TableLayout
+        android:id="@+id/myregistinfo"
+        android:layout_centerVertical="true"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20.0px"
+        android:layout_marginRight="20.0px"
+        android:layout_centerHorizontal="true" >
+
+        <TableRow
+            android:layout_marginBottom="15px"
+            android:background="@drawable/row_1" >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5px"
+                android:text="当前用户名：" />
+
+            <EditText
+                android:id="@+id/username"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="5px"
+                android:layout_weight="1"
+                android:clickable="false"
+                android:focusable="false"
+                android:focusableInTouchMode="false"
+                android:inputType="none" />
+            
+        </TableRow>
+
+        <TableRow
+            android:layout_marginBottom="15px"
+            android:background="@drawable/row_1" >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5px"
+                android:text="旧   密   码：" >
+                 <requestFocus />
+            </TextView>
+
+            <EditText
+                android:id="@+id/old_psw"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="5px"
+                android:layout_weight="1"
+                android:inputType="textPassword" />
+
+        </TableRow>
+
+        <TableRow
+            android:layout_marginBottom="15px"
+            android:background="@drawable/row_1" >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5px"
+                android:text="新   密   码：" />
+
+            <EditText
+                android:id="@+id/new_psw"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="5px"
+                android:layout_weight="1"
+                android:inputType="textPassword" />
+
+        </TableRow>
+        
+        <TableRow
+            android:layout_marginBottom="15px"
+            android:background="@drawable/row_1" >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5px"
+                android:text="再 次 输 入：" />
+
+            <EditText
+                android:id="@+id/new_psw2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="5px"
+                android:layout_weight="1"
+                android:inputType="textPassword" />
+
+        </TableRow>
+    </TableLayout>
+
+        <Button
+            android:id="@+id/action"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/myregistinfo"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="24dp"
+            android:text="修改密码" />
+
+    </RelativeLayout>

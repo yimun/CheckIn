@@ -89,6 +89,55 @@ public class SocketUtil {
 			out.flush();
 			String getstr = in.readLine();
 			System.out.println("checkget="+getstr);
+			if(getstr.equals("CHECKSUCCESS")){
+				isSuccess = true;
+			}
+
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return isSuccess;
+	}
+	
+	/**
+	 * ¸ü¸ÄÃÜÂë
+	 * @param username
+	 * @param password
+	 * @param newPass
+	 * @return
+	 */
+	public boolean changeMM(String username,String password,String newPass){
+		boolean isSuccess = false;
+		try {
+			out.println("changemm;" + username + ";" + password + ";" + newPass);
+			out.flush();
+			String getstr = in.readLine();
+			System.out.println("changemmget="+getstr);
+			if(getstr.equals("CHANGEMMSUCCESS")){
+				isSuccess = true;
+			}
+
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return isSuccess;
+	}
+	
+	/**
+	 * µÇÂ¼
+	 * @param username
+	 * @param password
+	 * @return
+	 */
+	public boolean login(String username,String password,String workcode){
+		boolean isSuccess = false;
+		try {
+			out.println("login;" + username + ";" + password+";"+workcode);
+			out.flush();
+			String getstr = in.readLine();
+			System.out.println("loginget="+getstr);
 			if(getstr.equals("LOGINSUCCESS")){
 				isSuccess = true;
 			}
