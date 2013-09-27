@@ -1,9 +1,5 @@
 package com.checkin;
 
-import com.checkin.service.MyService;
-import com.checkin.utils.PreferGeter;
-import com.checkin.utils.SocketUtil;
-
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
@@ -18,13 +14,15 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Looper;
 import android.text.TextUtils;
-import android.view.KeyEvent;
-import android.view.Menu;
 import android.view.View;
-import android.view.inputmethod.EditorInfo;
+import android.view.View.OnClickListener;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.checkin.service.MyService;
+import com.checkin.utils.PreferGeter;
+import com.checkin.utils.SocketUtil;
 
 /**
  * Activity which displays a login screen to the user, offering registration as
@@ -79,6 +77,16 @@ public class LoginActivity extends Activity {
 					public void onClick(View view) {
 						attemptLogin();
 					}
+				});
+		findViewById(R.id.regist_button).setOnClickListener(
+				new OnClickListener(){
+
+					@Override
+					public void onClick(View v) {
+						// TODO Auto-generated method stub
+						startActivity(new Intent(LoginActivity.this,RegistActivity.class));
+					}
+					
 				});
 	}
 
@@ -223,7 +231,7 @@ public class LoginActivity extends Activity {
 			case 1:
 				Toast.makeText(LoginActivity.this, "帐户登录成功！", Toast.LENGTH_LONG)
 						.show();
-
+				saveUser(); // 保存用户名密码
 				// 弹出对话框
 				new AlertDialog.Builder(LoginActivity.this)
 						.setCancelable(false)
@@ -235,7 +243,7 @@ public class LoginActivity extends Activity {
 									@Override
 									public void onClick(DialogInterface dialog,
 											int which) {
-										saveUser(); // 保存用户名密码
+										
 										startService(new Intent(
 												LoginActivity.this,
 												MyService.class));

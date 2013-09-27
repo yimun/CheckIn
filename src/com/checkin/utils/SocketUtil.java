@@ -39,7 +39,9 @@ public class SocketUtil {
 		}
 		try {
 			// socket = new Socket("192.168.0.1",9999);
+			socket.setSoTimeout(10000);  // ÉèÖÃÑÓÊ±£¬±ÜÃâ×èÈû´íÎó
 			socket = new Socket(IP, 9000);
+
 			in = new BufferedReader(new InputStreamReader(
 					socket.getInputStream()));
 			out = new PrintWriter(socket.getOutputStream());

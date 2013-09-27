@@ -34,7 +34,7 @@ public class SplashActivity extends Activity{
 		
 		// 判断是否已登陆，否则转到登录注册界面
 		if (geter.getUnm().equalsIgnoreCase("NULL")) {		
-			intent.setClass(getApplicationContext(), RegistActivity.class);
+			intent.setClass(getApplicationContext(), LoginActivity.class);
 		}
 		else{
 			intent.setClass(getApplicationContext(), MainActivity.class);
@@ -42,8 +42,9 @@ public class SplashActivity extends Activity{
 		
 		new Handler().postDelayed(new Runnable() {
 			public void run() {
-				SplashActivity.this.startActivity(intent);
 				SplashActivity.this.finish();
+				SplashActivity.this.startActivity(intent);
+				
 			}
 
 		}, SPLASH_DISPLAY_LENGHT);

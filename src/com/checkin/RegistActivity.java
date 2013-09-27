@@ -197,6 +197,7 @@ public class RegistActivity extends Activity {
 									@Override
 									public void onClick(DialogInterface dialog,
 											int which) {
+										RegistActivity.this.finish();
 										startActivity(new Intent(
 												RegistActivity.this,
 												LoginActivity.class));

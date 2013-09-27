@@ -47,6 +47,7 @@ public class MyService extends Service {
 				in.setAction(UPDATE_ACTION);
 				in.putExtra("state", 0);
 				sendBroadcast(in);
+				isCheck = true;
 				break;
 			case 1:
 				Log.i(tag, "发送离开通知通知");
@@ -55,6 +56,7 @@ public class MyService extends Service {
 				in.setAction(UPDATE_ACTION);
 				in.putExtra("state", 1);
 				sendBroadcast(in);
+				isCheck = false;
 				break;
 
 			}
@@ -111,7 +113,6 @@ public class MyService extends Service {
 		private PreferGeter geter;
 		private String ip;
 		private String username, password, workcode;
-		WifiCipherType TYPE;
 		boolean get;
 		private Context context;
 
@@ -147,14 +148,14 @@ public class MyService extends Service {
 				}
 
 				if (!isCheck && get) { // 首次签到
-					isCheck = true;
-
+					Log.i(tag,"首次签到");
 					Message tempMessage = new Message();
 					tempMessage.what = 0;
 					MyService.this.hd.sendMessage(tempMessage);
 				}
 				if (isCheck && !get) { // 离开
-					isCheck = false;
+					Log.i(tag,"离开");
+
 					Message tempMessage = new Message();
 					tempMessage.what = 1;
 					MyService.this.hd.sendMessage(tempMessage);
