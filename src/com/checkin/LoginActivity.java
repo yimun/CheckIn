@@ -79,14 +79,15 @@ public class LoginActivity extends Activity {
 					}
 				});
 		findViewById(R.id.regist_button).setOnClickListener(
-				new OnClickListener(){
+				new OnClickListener() {
 
 					@Override
 					public void onClick(View v) {
 						// TODO Auto-generated method stub
-						startActivity(new Intent(LoginActivity.this,RegistActivity.class));
+						startActivity(new Intent(LoginActivity.this,
+								RegistActivity.class));
 					}
-					
+
 				});
 	}
 
@@ -114,16 +115,14 @@ public class LoginActivity extends Activity {
 
 		// Check for a valid password.
 		if (TextUtils.isEmpty(str_mPassword)) {
-			edt_mPassword
-					.setError(getString(R.string.error_field_required));
+			edt_mPassword.setError(getString(R.string.error_field_required));
 			focusView = edt_mPassword;
 			cancel = true;
-		} /*else if (str_mPassword.length() < 4) {
-			edt_mPassword
-					.setError(getString(R.string.error_invalid_password));
-			focusView = edt_mPassword;
-			cancel = true;
-		}*/
+		} /*
+		 * else if (str_mPassword.length() < 4) { edt_mPassword
+		 * .setError(getString(R.string.error_invalid_password)); focusView =
+		 * edt_mPassword; cancel = true; }
+		 */
 
 		// Check for a valid email address.
 		if (TextUtils.isEmpty(str_mUsername)) {
@@ -211,7 +210,8 @@ public class LoginActivity extends Activity {
 					return 0;
 				}
 			}
-			boolean isSuccess = connect.login(str_mUsername, str_mPassword,str_mWorkcode);// 注册用户
+			boolean isSuccess = connect.login(str_mUsername, str_mPassword,
+					str_mWorkcode);// 注册用户
 			connect.close();
 			if (isSuccess)
 				return 1;
@@ -243,7 +243,7 @@ public class LoginActivity extends Activity {
 									@Override
 									public void onClick(DialogInterface dialog,
 											int which) {
-										
+
 										startService(new Intent(
 												LoginActivity.this,
 												MyService.class));
@@ -255,10 +255,10 @@ public class LoginActivity extends Activity {
 								}).show();
 				break;
 			case 2:
-				edt_mPassword
-						.setError(getString(R.string.error_incorrect_password));
+				// edt_mPassword.setError(getString(R.string.error_incorrect_password));
+				// // 显示错误框提示
 				edt_mPassword.requestFocus();
-				Toast.makeText(LoginActivity.this, "用户名或密码错误",
+				Toast.makeText(LoginActivity.this, "用户名，学号或密码错误",
 						Toast.LENGTH_LONG).show();
 				break;
 			}

@@ -10,8 +10,9 @@ import android.content.Context;
 
 /**
  * socket连接主类
+ * 
  * @author linwei
- *
+ * 
  */
 public class SocketUtil {
 
@@ -20,16 +21,17 @@ public class SocketUtil {
 	BufferedReader in;
 	PrintWriter out;
 
-	public boolean isConnected = false;	
+	public boolean isConnected = false;
 
 	public SocketUtil(String ip) {
 
 		this.IP = ip;
-		
+
 	}
 
 	/**
 	 * 连接至服务器
+	 * 
 	 * @throws Exception
 	 */
 	public void connectServer() throws Exception {
@@ -39,9 +41,9 @@ public class SocketUtil {
 		}
 		try {
 			// socket = new Socket("192.168.0.1",9999);
-			socket.setSoTimeout(10000);  // 设置延时，避免阻塞错误
-			socket = new Socket(IP, 9000);
 
+			socket = new Socket(IP, 9000);
+			socket.setSoTimeout(10000); // 设置延时，避免阻塞错误
 			in = new BufferedReader(new InputStreamReader(
 					socket.getInputStream()));
 			out = new PrintWriter(socket.getOutputStream());
@@ -57,6 +59,7 @@ public class SocketUtil {
 
 	/**
 	 * 注册用户
+	 * 
 	 * @param username
 	 * @param pwd
 	 * @param workcode
@@ -68,7 +71,7 @@ public class SocketUtil {
 			out.println("create;" + username + ";" + pwd + ";" + workcode);
 			out.flush();
 			String getstr = in.readLine();
-			System.out.println("registget="+getstr);
+			System.out.println("registget=" + getstr);
 			if (getstr.equals("USERCREATED")) {
 				isSuccess = true;
 			}
@@ -80,9 +83,10 @@ public class SocketUtil {
 
 	/**
 	 * 发送签到信息
+	 * 
 	 * @return isSuccess
 	 */
-	public boolean sendCheck(String username,String password,String workcode) {
+	public boolean sendCheck(String username, String password, String workcode) {
 
 		boolean isSuccess = false;
 
@@ -90,8 +94,8 @@ public class SocketUtil {
 			out.println("check;" + username + ";" + password + ";" + workcode);
 			out.flush();
 			String getstr = in.readLine();
-			System.out.println("checkget="+getstr);
-			if(getstr.equals("CHECKSUCCESS")){
+			System.out.println("checkget=" + getstr);
+			if (getstr.equals("CHECKSUCCESS")) {
 				isSuccess = true;
 			}
 
@@ -101,22 +105,25 @@ public class SocketUtil {
 		}
 		return isSuccess;
 	}
-	
+
 	/**
 	 * 更改密码
+	 * 
 	 * @param username
 	 * @param password
 	 * @param newPass
 	 * @return
 	 */
-	public boolean changeMM(String username,String password,String newPass){
+	public boolean changeMM(String username, String password, String workcode,
+			String newPass) {
 		boolean isSuccess = false;
 		try {
-			out.println("changemm;" + username + ";" + password + ";" + newPass);
+			out.println("changemm;" + username + ";" + password + ";"
+					+ workcode + ";" + newPass);
 			out.flush();
 			String getstr = in.readLine();
-			System.out.println("changemmget="+getstr);
-			if(getstr.equals("CHANGEMMSUCCESS")){
+			System.out.println("changemmget=" + getstr);
+			if (getstr.equals("CHANGEMMSUCCESS")) {
 				isSuccess = true;
 			}
 
@@ -126,21 +133,22 @@ public class SocketUtil {
 		}
 		return isSuccess;
 	}
-	
+
 	/**
 	 * 登录
+	 * 
 	 * @param username
 	 * @param password
 	 * @return
 	 */
-	public boolean login(String username,String password,String workcode){
+	public boolean login(String username, String password, String workcode) {
 		boolean isSuccess = false;
 		try {
-			out.println("login;" + username + ";" + password+";"+workcode);
+			out.println("login;" + username + ";" + password + ";" + workcode);
 			out.flush();
 			String getstr = in.readLine();
-			System.out.println("loginget="+getstr);
-			if(getstr.equals("LOGINSUCCESS")){
+			System.out.println("loginget=" + getstr);
+			if (getstr.equals("LOGINSUCCESS")) {
 				isSuccess = true;
 			}
 

@@ -6,8 +6,10 @@ import com.checkin.utils.SocketUtil;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences.Editor;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Looper;
@@ -73,7 +75,7 @@ public class ChangeMMActivity extends Activity {
 
 	public void onResume() {
 		super.onResume();
-		username = ip = new PreferGeter(this).getUnm();
+		username = new PreferGeter(this).getUnm();
 		edt_username.setText(username);
 	}
 
@@ -108,7 +110,9 @@ public class ChangeMMActivity extends Activity {
 					return 0;
 				}
 			}
-			boolean isSuccess = connect.changeMM(username, old_password, new_password);// 注册用户
+			String workcode = new PreferGeter(ChangeMMActivity.this).getWcd();
+			boolean isSuccess = connect.changeMM(username, old_password,
+					workcode, new_password);
 			connect.close();
 			if (isSuccess)
 				return 1;
@@ -128,15 +132,12 @@ public class ChangeMMActivity extends Activity {
 						Toast.LENGTH_LONG).show();
 				break;
 			case 1:
-				Toast.makeText(ChangeMMActivity.this,
-						"密码修改成功！", Toast.LENGTH_LONG).show();
-
 				// 弹出对话框
 				new AlertDialog.Builder(ChangeMMActivity.this)
 						.setCancelable(false)
 						.setIcon(R.drawable.ic_launcher)
 						.setTitle("密码修改成功！")
-						.setMessage("您已成功修改用户 " + username + " 的密码")
+						.setMessage("您已成功修改用户 " + username + " 的密码,请重新登录")
 						.setPositiveButton("确定",
 								new DialogInterface.OnClickListener() {
 									@Override
@@ -145,7 +146,7 @@ public class ChangeMMActivity extends Activity {
 										ChangeMMActivity.this.finish();
 										startActivity(new Intent(
 												ChangeMMActivity.this,
-												MainActivity.class));
+												LoginActivity.class));
 									}
 								}).show();
 				break;
@@ -181,5 +182,6 @@ public class ChangeMMActivity extends Activity {
 		pd.setIndeterminate(false);
 		pd.setCancelable(true); // 设置ProgressDialog 是否可以按退回键取消
 	}
+	
 
 }

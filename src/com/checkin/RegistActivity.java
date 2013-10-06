@@ -157,7 +157,6 @@ public class RegistActivity extends Activity {
 				try {
 					connect.connectServer();
 				} catch (Exception e) {
-
 					return 0;
 				}
 			}
