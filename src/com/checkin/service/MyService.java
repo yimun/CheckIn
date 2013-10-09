@@ -1,5 +1,8 @@
 package com.checkin.service;
 
+import java.util.Timer;
+import java.util.TimerTask;
+
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -8,7 +11,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Handler;
 import android.os.IBinder;
-import android.os.Looper;
 import android.os.Message;
 import android.util.Log;
 
@@ -16,7 +18,6 @@ import com.checkin.MainActivity;
 import com.checkin.R;
 import com.checkin.utils.PreferGeter;
 import com.checkin.utils.SocketUtil;
-import com.checkin.utils.WifiAdmin.WifiCipherType;
 
 /**
  * 后台发送签到信息主服务， 判断是否能与服务器连接并发送消息
@@ -28,14 +29,16 @@ public class MyService extends Service {
 
 	static int intCounter;
 	static boolean runFlag = true;
-	static final int DELAY = 30 * 1000; // 刷新频率2分钟
+	static final int DELAY = 2 * 60 * 1000; // 刷新频率2分钟
 	static int noSignCounter;
-	final String UPDATE_ACTION = "com.checkin.updateui";// 更新前台UI
-	String tag = "MyService";
-	public static boolean isCheck = false;
-	ScanTask task;
-	Intent in;
+	static final String UPDATE_ACTION = "com.checkin.updateui";// 更新前台UI
+	private String tag = "MyService";
+	private Intent in;
+	private Timer timer;
+	private WakeLockManger wm = new WakeLockManger(this); // CPU锁
 
+	public static boolean isCheck = false;
+	
 	// 接受网络检测信号返回值并更新UI线程
 	Handler hd = new Handler() {
 		@Override
@@ -69,9 +72,10 @@ public class MyService extends Service {
 
 		super.onCreate();
 		Log.i(tag, "onCreate()启动服务");
-
-		task = new ScanTask(this);
-		task.start();
+		timer = new Timer();
+		TimerTask task = new ScanTask(this);
+		timer.scheduleAtFixedRate(task, 0, DELAY);
+		wm.acquireWakeLock();
 
 	}
 
@@ -96,9 +100,12 @@ public class MyService extends Service {
 	public void onDestroy() {
 
 		// TODO Auto-generated method stub
-		Log.i(tag, "onDestroy");
-		hd.removeCallbacks(task);
 		super.onDestroy();
+		Log.i(tag, "onDestroy");
+		if (timer != null) {
+			timer.cancel();
+		}
+		wm.releaseWakeLock();
 
 	}
 
@@ -108,7 +115,7 @@ public class MyService extends Service {
 	 * @author Administrator
 	 * 
 	 */
-	public class ScanTask extends Thread {
+	public class ScanTask extends TimerTask {
 
 		private SocketUtil connect;
 		private PreferGeter geter;
@@ -124,62 +131,54 @@ public class MyService extends Service {
 		@Override
 		public void run() {
 			// Looper.prepare();
-			while (runFlag) {
+			if (!runFlag) {
+				return;
+			}
+			geter = new PreferGeter(context);
+			ip = geter.getIP();
+			username = geter.getUnm();
+			password = geter.getPwd();
+			workcode = geter.getWcd();
 
-				geter = new PreferGeter(context);
-				ip = geter.getIP();
-				username = geter.getUnm();
-				password = geter.getPwd();
-				workcode = geter.getWcd();
-
-				get = false;
-				intCounter++;
-				Log.i("CheckIn",
-						"Service Counter:" + Integer.toString(intCounter));
-				connect = new SocketUtil(ip);
-				if (!connect.isConnected) {
-					try {
-						connect.connectServer();
-						get = connect.sendCheck(username, password, workcode);
-						connect.close();
-						if (!get) {
-							noSignCounter++;
-						}
-					} catch (Exception e) {
-						e.printStackTrace();
-						Log.i(tag, "noSignCounter=" + noSignCounter);
-						noSignCounter++; // 连接失败次数统计
-					}
-				}
-				
-				if (!isCheck && get) { // 首次签到
-					Log.i(tag, "首次签到");
-					Message tempMessage = new Message();
-					tempMessage.what = 0;
-					MyService.this.hd.sendMessage(tempMessage);
-				}
-				if (isCheck && !get) { // 离开
-					Log.i(tag, "离开");
-					Message tempMessage = new Message();
-					tempMessage.what = 1;
-					MyService.this.hd.sendMessage(tempMessage);
-				}
-
-				// 连续5次无响应，则结束服务
-				if (noSignCounter >= 5) {
-
-					Log.i(tag, "结束服务指令");
-					runFlag = false;
-					MyService.this.stopSelf();
-				}
-
+			get = false;
+			intCounter++;
+			Log.i("CheckIn", "Service Counter:" + Integer.toString(intCounter));
+			connect = new SocketUtil(ip);
+			if (!connect.isConnected) {
 				try {
-					Log.i(tag, "Thread sleep");
-					Thread.sleep(DELAY);
-				} catch (InterruptedException e) {
-					Log.i(tag, "InterruptedException runflag = false");
-					// MyService.runFlag = false;
+					connect.connectServer();
+					get = connect.sendCheck(username, password, workcode);
+					connect.close();
+					if (!get) {
+						noSignCounter++;
+					}
+				} catch (Exception e) {
+					e.printStackTrace();
+					Log.i(tag, "noSignCounter=" + noSignCounter);
+					noSignCounter++; // 连接失败次数统计
 				}
+			}
+
+			if (!isCheck && get) { // 首次签到
+				Log.i(tag, "首次签到");
+				Message tempMessage = new Message();
+				tempMessage.what = 0;
+				MyService.this.hd.sendMessage(tempMessage);
+			}
+			if (isCheck && !get) { // 离开
+				Log.i(tag, "离开");
+				Message tempMessage = new Message();
+				tempMessage.what = 1;
+				MyService.this.hd.sendMessage(tempMessage);
+			}
+
+			// 连续5次无响应，则结束服务
+			if (noSignCounter >= 5) {
+
+				Log.i(tag, "结束服务指令");
+				runFlag = false;
+				timer.cancel();
+				MyService.this.stopSelf();
 			}
 
 		}
