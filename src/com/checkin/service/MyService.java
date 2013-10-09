@@ -17,17 +17,18 @@ import com.checkin.R;
 import com.checkin.utils.PreferGeter;
 import com.checkin.utils.SocketUtil;
 import com.checkin.utils.WifiAdmin.WifiCipherType;
+
 /**
- * 后台发送签到信息主服务，
- * 判断是否能与服务器连接并发送消息
+ * 后台发送签到信息主服务， 判断是否能与服务器连接并发送消息
+ * 
  * @author Administrator
- *
+ * 
  */
 public class MyService extends Service {
 
 	static int intCounter;
 	static boolean runFlag = true;
-	static final int DELAY = 2 * 60 * 1000; // 刷新频率2分钟
+	static final int DELAY = 30 * 1000; // 刷新频率2分钟
 	static int noSignCounter;
 	final String UPDATE_ACTION = "com.checkin.updateui";// 更新前台UI
 	String tag = "MyService";
@@ -62,12 +63,13 @@ public class MyService extends Service {
 			}
 		}
 	};
-	
+
 	@Override
 	public void onCreate() {
 
 		super.onCreate();
 		Log.i(tag, "onCreate()启动服务");
+
 		task = new ScanTask(this);
 		task.start();
 
@@ -83,8 +85,6 @@ public class MyService extends Service {
 		runFlag = true;
 
 	}
-
-
 
 	@Override
 	public IBinder onBind(Intent intent) {
@@ -104,8 +104,9 @@ public class MyService extends Service {
 
 	/**
 	 * 后台扫描通信线程
+	 * 
 	 * @author Administrator
-	 *
+	 * 
 	 */
 	public class ScanTask extends Thread {
 
@@ -120,16 +121,17 @@ public class MyService extends Service {
 			this.context = con;
 		}
 
+		@Override
 		public void run() {
-			Looper.prepare();
+			// Looper.prepare();
 			while (runFlag) {
-				
+
 				geter = new PreferGeter(context);
 				ip = geter.getIP();
 				username = geter.getUnm();
 				password = geter.getPwd();
 				workcode = geter.getWcd();
-				
+
 				get = false;
 				intCounter++;
 				Log.i("CheckIn",
@@ -140,22 +142,24 @@ public class MyService extends Service {
 						connect.connectServer();
 						get = connect.sendCheck(username, password, workcode);
 						connect.close();
+						if (!get) {
+							noSignCounter++;
+						}
 					} catch (Exception e) {
 						e.printStackTrace();
 						Log.i(tag, "noSignCounter=" + noSignCounter);
 						noSignCounter++; // 连接失败次数统计
 					}
 				}
-
+				
 				if (!isCheck && get) { // 首次签到
-					Log.i(tag,"首次签到");
+					Log.i(tag, "首次签到");
 					Message tempMessage = new Message();
 					tempMessage.what = 0;
 					MyService.this.hd.sendMessage(tempMessage);
 				}
 				if (isCheck && !get) { // 离开
-					Log.i(tag,"离开");
-
+					Log.i(tag, "离开");
 					Message tempMessage = new Message();
 					tempMessage.what = 1;
 					MyService.this.hd.sendMessage(tempMessage);
@@ -193,8 +197,8 @@ public class MyService extends Service {
 		// 定义通知栏展现的内容信息
 		CharSequence title, contentTitle, contentText;
 		if (isArrive) {
-			title = "注册成功";
-			contentTitle = "注册成功";
+			title = "签到成功";
+			contentTitle = "签到成功";
 			contentText = "您已成功注册到811";
 
 		} else {
